@@ -2130,7 +2130,7 @@
 
         // Allowed emojis for events
         const ALLOWED_EMOJIS = [
-            '⚔️', '📜', '🔔', '✨', '🔥', '💧', '🌲', '⛰️', '🏘️', '💀', '🌕', '☀️', '☁️', '🌧️', '❄️', '💨', '🧭', '🗺️', '💰', '🛡️', '🧪', '🔑', '🚪', '❓', '❕', '⚠️', '💡', '💬', '👣', '🐎', '🏕️', '🛌', '🍻', '🍖', '🍎', '🍄', '🕸️', '🕷️', '🐺', '🐻', '🐉', '👻', '🧙', '🧝', '👹', '😇', '😈', '👑', '💎', '🏺', '🗝️', '⏳', '�️'
+            '⚔️', '📜', '🔔', '✨', '🔥', '💧', '🌲', '⛰️', '🏘️', '💀', '🌕', '☀️', '☁️', '🌧️', '❄️', '💨', '🧭', '🗺️', '💰', '🛡️', '🧪', '🔑', '🚪', '❓', '❕', '⚠️', '💡', '💬', '👣', '🐎', '🏕️', '🛌', '🍻', '🍖', '🍎', '🍄', '🕸️', '🕷️', '🐺', '🐻', '🐉', '👻', '🧙', '🧝', '👹', '😇', '😈', '👑', '💎', '🏺', '🗝️', '⏳', '🗓️'
         ];
 
 
@@ -2789,7 +2789,10 @@
          * The main game loop, updates time and visuals.
          */
         function gameLoop() {
-            if (!isRunning) return; // Only run if not paused or dragged
+            if (!isRunning) {
+                console.log("gameLoop: Not running, exiting.");
+                return; // Only run if not paused or dragged
+            }
 
             let minutesToAdd = 0;
             switch (inGameTimeUnit) {
@@ -2804,7 +2807,7 @@
                     break;
             }
             inGameTimeMinutes += minutesToAdd;
-            console.log(`Game Loop: Time advancing to ${inGameTimeMinutes} minutes.`); // Added log
+            console.log(`Game Loop: Time advancing to ${inGameTimeMinutes} minutes. isRunning: ${isRunning}`); // Added log
 
             updateTimeDisplay();
             updateVisuals(); // This will also handle weather changes
@@ -2817,6 +2820,7 @@
          */
         function startTimer() {
             if (!isRunning) {
+                console.log("startTimer: Attempting to start timer.");
                 const rate = parseFloat(realTimeRateInput.value);
                 if (isNaN(rate) || rate <= 0) {
                     showMessageBox('Please enter a valid positive number for the time rate.');
@@ -2825,6 +2829,7 @@
                 realTimeRateSecondsPerUnit = rate;
                 timerInterval = setInterval(gameLoop, realTimeRateSecondsPerUnit * 1000);
                 isRunning = true;
+                console.log(`startTimer: Timer started. isRunning: ${isRunning}`);
                 startBtn.classList.add('disabled');
                 startBtn.disabled = true;
                 pauseBtn.classList.remove('disabled');
@@ -2856,6 +2861,8 @@
                 initAudio(); // Initialize audio context on first user interaction
                 Tone.start(); // Start Tone.js audio context
                 updateAudioLevels();
+            } else {
+                console.log("startTimer: Timer already running.");
             }
         }
 
@@ -2864,8 +2871,10 @@
          */
         function pauseTimer() {
             if (isRunning) {
+                console.log("pauseTimer: Attempting to pause timer.");
                 clearInterval(timerInterval);
                 isRunning = false;
+                console.log(`pauseTimer: Timer paused. isRunning: ${isRunning}`);
                 startBtn.classList.remove('disabled');
                 startBtn.disabled = false;
                 pauseBtn.classList.add('disabled');
@@ -2889,6 +2898,8 @@
 
 
                 updateAudioLevels(); // Mute sounds when paused
+            } else {
+                console.log("pauseTimer: Timer already paused.");
             }
         }
 
@@ -2896,6 +2907,7 @@
          * Resets the time tracker to its initial state.
          */
         function resetTimer() {
+            console.log("resetTimer: Resetting timer.");
             pauseTimer(); // Ensure timer is stopped
             inGameTimeMinutes = 8 * MINUTES_IN_HOUR; // Reset to 08:00 AM
             updateTimeDisplay();
@@ -2929,6 +2941,7 @@
 
             // Ensure landscape scrolling is stopped after reset
             landscapeSVG.style.animationDuration = '1000000s';
+            console.log("resetTimer: Timer reset complete.");
         }
 
         /**
@@ -3414,15 +3427,17 @@
          */
         function checkScheduledEvents() {
             const currentTotalMinutes = inGameTimeMinutes;
-            console.log(`Checking scheduled events at ${currentTotalMinutes} minutes.`); // Debug log
-            scheduledEvents.forEach(event => {
-                console.log(`  Event ID ${event.id}: Scheduled for ${event.timeInMinutes}, Triggered: ${event.triggered}`); // Debug log
+            console.log(`checkScheduledEvents: Current time is ${currentTotalMinutes} minutes.`); // Debug log
+            let eventTriggeredThisCycle = false;
+
+            for (const event of scheduledEvents) {
+                console.log(`  checkScheduledEvents: Checking Event ID ${event.id}. Scheduled for ${event.timeInMinutes}, Triggered: ${event.triggered}`); // Debug log
                 // Check if the event has not been triggered yet and if the current time has passed or reached the event time
                 if (!event.triggered && currentTotalMinutes >= event.timeInMinutes) {
-                    console.log(`  >>> EVENT TRIGGERED: ${event.message} at ${currentTotalMinutes} minutes.`); // Debug log
+                    console.log(`  >>> EVENT TRIGGERED: ${event.message} at ${currentTotalMinutes} minutes. Pausing timer.`); // Debug log
                     showMessageBox(`Event Triggered: Day ${event.day}, ${String(event.hour).padStart(2, '0')}:${String(event.minute).padStart(2, '0')} - ${event.message}`);
                     event.triggered = true; // Mark as triggered
-                    pauseTimer(); // Pause timer when event arrives
+                    eventTriggeredThisCycle = true; // Set flag
                     // Optionally, remove the event marker or change its style
                     const marker = timelineContent.querySelector(`[data-event-id="${event.id}"]`);
                     if (marker) {
@@ -3430,8 +3445,14 @@
                     }
                     // Show event details pop-up
                     showEventDetails(event.id);
+                    // Do not break here if multiple events can trigger at the same minute,
+                    // but ensure pauseTimer is called only once per cycle if multiple events trigger.
                 }
-            });
+            }
+
+            if (eventTriggeredThisCycle) {
+                pauseTimer(); // Pause timer if any event was triggered
+            }
         }
 
         // --- Task List Functions ---
@@ -3675,4 +3696,3 @@
     </script>
 </body>
 </html>
-�
