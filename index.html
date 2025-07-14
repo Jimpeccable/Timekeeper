@@ -565,6 +565,7 @@
             padding-bottom: 1vmin; /* Reduced padding to bottom of each group */
             border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Separator line */
             margin-bottom: 1vmin; /* Reduced margin below separator */
+            position: relative; /* For premium overlay */
         }
 
         .control-group:last-child {
@@ -1545,6 +1546,236 @@
             }
         }
 
+        /* Premium Locking Styles */
+        .premium-locked-container {
+            position: relative;
+            width: 100%;
+            /* min-height: 100px; /* Adjust as needed to cover content */
+            /* padding: 1vmin; /* Ensure padding matches control-group */
+            /* border-radius: 15px; /* Match control-panel border-radius */
+            /* overflow: hidden; /* Hide overflow from children */
+        }
+
+        .premium-locked-container.locked > *:not(.premium-overlay) {
+            pointer-events: none; /* Disable interaction with children */
+            opacity: 0.5; /* Dim content */
+        }
+
+        .premium-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Dark overlay */
+            border-radius: 15px; /* Match container */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--sleek-text);
+            font-size: 2.2vmin;
+            font-weight: 600;
+            text-align: center;
+            backdrop-filter: blur(3px);
+            z-index: 10; /* Above content */
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            opacity: 0; /* Hidden by default */
+            pointer-events: none; /* Do not block clicks when hidden */
+        }
+
+        .premium-locked-container.locked .premium-overlay {
+            opacity: 1; /* Show overlay when locked */
+            pointer-events: auto; /* Enable clicks on overlay */
+        }
+
+        .premium-overlay p {
+            margin: 0;
+            padding: 1vmin;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Adjust premium unlock modal message area */
+        #premiumUnlockMessage {
+            font-size: 1.8vmin;
+            margin-top: 1vmin;
+            color: var(--sleek-text);
+        }
+        #premiumUnlockMessage.error {
+            color: var(--error-color);
+        }
+        #premiumUnlockMessage.success {
+            color: #4CAF50; /* Green */
+        }
+
+        /* Styles for the premium unlock button in control panel */
+        .premium-unlock-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1vmin;
+            padding-top: 1vmin;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 1vmin;
+        }
+
+        .premium-unlock-section h4 {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 2.2vmin;
+            color: var(--sleek-accent);
+            text-align: center;
+            margin-bottom: 0.8vmin;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .premium-unlock-section p {
+            font-size: 1.8vmin;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+        }
+
+        .premium-unlock-section .button {
+            width: auto;
+            padding: 1.2vmin 2vmin;
+            font-size: 2vmin;
+            display: flex;
+            align-items: center;
+            gap: 0.5vmin;
+        }
+        .premium-unlock-section .button svg {
+            width: 2vmin;
+            height: 2vmin;
+        }
+
+        /* Modal styling (copied from index.html for consistency) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+            backdrop-filter: blur(5px); /* Frosted glass effect for background */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--sleek-bg);
+            border: 1px solid var(--sleek-border);
+            border-radius: 15px;
+            padding: 3vmin;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+            width: 50vmin; /* Adjusted width */
+            max-width: 90%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5vmin;
+            color: var(--sleek-text);
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 3vmin;
+            color: var(--sleek-accent);
+            margin-bottom: 1vmin;
+        }
+
+        .modal-content label {
+            font-size: 1.8vmin;
+            text-align: left;
+            width: 100%;
+        }
+
+        .modal-content .input-field {
+            width: 100%;
+            padding: 1vmin 1.5vmin;
+            background: var(--sleek-input-bg);
+            border: 1px solid var(--sleek-input-border);
+            border-radius: 10px;
+            color: var(--sleek-text);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8vmin;
+            text-align: center;
+            outline: none;
+            box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.4);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .modal-content .input-field:focus {
+            border-color: var(--sleek-accent);
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.6), 0 0 8px var(--sleek-accent);
+        }
+
+        .modal-content .button {
+            padding: 1.2vmin 2vmin;
+            background: var(--sleek-button-bg);
+            border: 1px solid var(--sleek-border);
+            border-radius: 10px;
+            color: var(--sleek-text);
+            font-family: 'Poppins', sans-serif;
+            font-size: 2vmin;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+            text-shadow: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5vmin;
+            width: fit-content;
+            margin: 0 auto;
+        }
+
+        .modal-content .button:hover {
+            background: var(--sleek-button-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content .button:active {
+            background: var(--sleek-button-active);
+            transform: translateY(0);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1vmin;
+            right: 1vmin;
+            background: none;
+            border: none;
+            color: var(--sleek-text);
+            font-size: 3vmin;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 0.5vmin;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .close-button:hover {
+            color: var(--error-color);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .close-button svg {
+            width: 2.5vmin;
+            height: 2.5vmin;
+        }
+
     </style>
 </head>
 <body>
@@ -1662,58 +1893,83 @@
                         <option value="curse-of-strahd">Curse of Strahd (Dire)</option>
                     </select>
                 </div>
-                <div class="input-row">
-                    <label for="biome-select">Biome:</label>
-                    <select id="biome-select" class="control-select">
-                        <option value="forest">Forest</option>
-                        <option value="desert">Desert</option>
-                        <option value="mountains">Mountains</option>
-                        <option value="city">City</option>
-                        <option value="dungeon">Dungeon</option>
-                        <option value="arctic">Arctic</option>
-                        <option value="coast">Coast</option>
-                    </select>
-                </div>
-                <div class="input-row">
-                    <label for="manual-weather">Choose Weather:</label>
-                    <select id="manual-weather" class="control-select">
-                        <!-- Options will be dynamically populated by JS -->
-                    </select>
+                <div id="environment-locked-features" class="premium-locked-container">
+                    <div class="premium-overlay" data-modal-target="modal-premium-unlock">
+                        <p>Unlock Premium for Environment Controls</p>
+                    </div>
+                    <div class="input-row">
+                        <label for="biome-select">Biome:</label>
+                        <select id="biome-select" class="control-select">
+                            <option value="forest">Forest</option>
+                            <option value="desert">Desert</option>
+                            <option value="mountains">Mountains</option>
+                            <option value="city">City</option>
+                            <option value="dungeon">Dungeon</option>
+                            <option value="arctic">Arctic</option>
+                            <option value="coast">Coast</option>
+                        </select>
+                    </div>
+                    <div class="input-row">
+                        <label for="manual-weather">Choose Weather:</label>
+                        <select id="manual-weather" class="control-select">
+                            <!-- Options will be dynamically populated by JS -->
+                        </select>
+                    </div>
                 </div>
             </div>
 
             <div class="control-group">
                 <h4 class="control-group-title">Party Actions</h4>
-                <div class="input-row">
-                    <label for="set-day-input">Move Day:</label>
-                    <input type="number" id="set-day-input" value="1" min="1">
-                    <button id="set-day-btn" class="control-btn">Move</button>
-                </div>
-                <div class="buttons-group">
-                    <button id="short-rest-btn" class="control-btn">Short Rest (1h)</button>
-                    <button id="long-rest-btn" class="control-btn">Long Rest (8h)</button>
-                </div>
-                <div class="input-row">
-                    <label for="travel-time-input">Travel:</label>
-                    <input type="number" id="travel-time-input" value="1" min="1">
-                    <select id="travel-unit-select" class="control-select">
-                        <option value="hour">Hour(s)</option>
-                        <option value="day">Day(s)</option>
-                    </select>
-                    <button id="travel-btn" class="control-btn">Go</button>
+                <div id="party-actions-locked-features" class="premium-locked-container">
+                    <div class="premium-overlay" data-modal-target="modal-premium-unlock">
+                        <p>Unlock Premium for Party Actions</p>
+                    </div>
+                    <div class="input-row">
+                        <label for="set-day-input">Move Day:</label>
+                        <input type="number" id="set-day-input" value="1" min="1">
+                        <button id="set-day-btn" class="control-btn">Move</button>
+                    </div>
+                    <div class="buttons-group">
+                        <button id="short-rest-btn" class="control-btn">Short Rest (1h)</button>
+                        <button id="long-rest-btn" class="control-btn">Long Rest (8h)</button>
+                    </div>
+                    <div class="input-row">
+                        <label for="travel-time-input">Travel:</label>
+                        <input type="number" id="travel-time-input" value="1" min="1">
+                        <select id="travel-unit-select" class="control-select">
+                            <option value="hour">Hour(s)</option>
+                            <option value="day">Day(s)</option>
+                        </select>
+                        <button id="travel-btn" class="control-btn">Go</button>
+                    </div>
                 </div>
             </div>
 
             <div class="control-group">
                 <h4 class="control-group-title">Events & Audio</h4>
                 <div class="buttons-group">
-                    <button id="add-event-btn" class="control-btn">Schedule Event</button>
+                    <div id="schedule-event-locked-feature" class="premium-locked-container">
+                        <div class="premium-overlay" data-modal-target="modal-premium-unlock">
+                            <p>Unlock Premium for Event Scheduling</p>
+                        </div>
+                        <button id="add-event-btn" class="control-btn">Schedule Event</button>
+                    </div>
                     <button id="mute-btn" aria-label="Mute/Unmute Audio">
                         <svg id="volume-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
                         </svg>
                     </button>
                 </div>
+            </div>
+
+            <!-- Premium Unlock Section -->
+            <div class="premium-unlock-section">
+                <h4>Premium Features</h4>
+                <p id="premiumStatus">Premium Status: Locked</p>
+                <button id="openPremiumUnlockModalBtn" class="button button-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-key"><path d="M2.5 19.5V21h1.5l9.5-9.5-1.5-1.5L2.5 19.5z"/><path d="M14.32 10.68L16 9l3-3 1.5 1.5-3 3-1.68 1.68c-.81.81-1.92 1.25-3.06 1.25H9.5V12.5c0-1.14.44-2.25 1.25-3.06z"/></svg>
+                    Unlock Premium
+                </button>
             </div>
         </div>
     </div>
@@ -1816,6 +2072,21 @@
         <span>SUPPORT ON PATREON</span>
     </a>
 
+    <!-- New Premium Unlock Modal (copied from index.html) -->
+    <div id="modal-premium-unlock" class="modal">
+        <div class="modal-content card">
+            <span class="close-button" data-modal="modal-premium-unlock">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </span>
+            <h2>Unlock Premium Features</h2>
+            <p>Enter the monthly unlock code to access premium features.</p>
+            <label for="premiumCodeInput">Monthly Code:</label>
+            <input type="text" id="premiumCodeInput" class="input-field" placeholder="Enter 8-character code">
+            <div id="premiumUnlockMessage" class="message-area"></div>
+            <button id="submitPremiumCodeBtn" class="button button-primary">Unlock</button>
+        </div>
+    </div>
+
     <script>
         // --- JavaScript Global Variables ---
         let inGameTimeMinutes = 0; // Total in-game minutes from Day 1, 00:00
@@ -1851,6 +2122,10 @@
         let scheduledEvents = []; // Array to store scheduled events: [{id, day, hour, minute, message, icon, triggered}]
         let nextEventId = 0; // For unique event IDs
         let currentEventDetailsId = null; // To store the ID of the event currently displayed in details modal
+
+        // Premium Unlock Variables
+        // Removed hardcoded PREMIUM_CODE; it will now be fetched.
+        let isPremiumUnlocked = false; // Premium status flag
 
         // --- DOM Element References ---
         const inGameTimeDisplay = document.getElementById('in-game-time');
@@ -1933,6 +2208,19 @@
         const deleteEventBtn = document.getElementById('delete-event-btn');
         const closeDetailsBtn = document.getElementById('close-details-btn');
 
+        // Premium Unlock DOM Elements
+        const premiumStatusDisplay = document.getElementById('premiumStatus');
+        const openPremiumUnlockModalBtn = document.getElementById('openPremiumUnlockModalBtn');
+        const premiumUnlockModal = document.getElementById('modal-premium-unlock');
+        const premiumCodeInput = document.getElementById('premiumCodeInput');
+        const premiumUnlockMessage = document.getElementById('premiumUnlockMessage');
+        const submitPremiumCodeBtn = document.getElementById('submitPremiumCodeBtn');
+
+        // Locked Feature Containers
+        const environmentLockedFeatures = document.getElementById('environment-locked-features');
+        const partyActionsLockedFeatures = document.getElementById('party-actions-locked-features');
+        const scheduleEventLockedFeature = document.getElementById('schedule-event-locked-feature');
+
 
         // Landscape SVG Paths
         const landscapeLayers = {
@@ -1958,6 +2246,10 @@
 
         // Define a very large conceptual timeline to ensure smooth scrolling
         const CONCEPTUAL_TIMELINE_DAYS = 365 * 10; // 10 years worth of timeline content
+
+        // Define a placeholder API URL for the monthly premium code.
+        // In a real application, you would replace this with your actual backend endpoint.
+        const PREMIUM_CODE_API_URL = 'https://api.example.com/getMonthlyPremiumCode'; // Placeholder URL
 
         // Sky color definitions for smooth interpolation
         const SKY_TRANSITIONS = {
@@ -1995,7 +2287,7 @@
                 'windy': { minDuration: 90, maxDuration: 210, particleColor: null, particleSpeed: 0, particleDensity: 0, windEffect: 1.2, tempC: [8, 18], description: 'Windy', visibility: 'Normal' }
             },
             'icewind-dale': {
-                'snowy': { minDuration: 240, maxDuration: 720, particleColor: 'rgba(255, 255, 255, 0.8)', particleSpeed: 3, particleDensity: 100, windEffect: 0.5, tempC: [-20, -5], description: 'Snowy', visibility: 'Reduced', landscapeFilter: 'saturate(0.2) brightness(1.5)' },
+                'snowy': { minDuration: 240, maxDuration: 720, particleColor: 'rgba(255, 255, 255, 0.8)', particleSpeed: 3, particleDensity: 100, windEffect: 0.5, tempC: [-20, -5], description: 'Snowy', landscapeFilter: 'saturate(0.2) brightness(1.5)' },
                 'blizzard': { minDuration: 60, maxDuration: 180, particleColor: 'rgba(255, 255, 255, 1.0)', particleSpeed: 6, particleDensity: 200, windEffect: 1.5, tempC: [-30, -10], description: 'Blizzard', visibility: 'Very Low', landscapeFilter: 'saturate(0.2) brightness(1.5)' }
             },
             'curse-of-strahd': {
@@ -2070,7 +2362,7 @@
             'dungeon': {
                 landscape: { // Simplified dungeon entrance/cave
                     'mountain-layer-1': "M0 500 L0 350 C 150 250, 350 200, 500 250 S 700 300, 1000 200 L1000 500 Z",
-                    'mountain-layer-2': "M0 500 L0 400 C 100 350, 200 320, 300 350 S 400 380, 500 350 S 600 320, 700 350 S 800 380, 900 350 S 1000 320, 1000 500 Z",
+                    'mountain-layer-2': "M0 500 L0 400 C 100 350, 200 320, 300 350 S 400 380, 500 350 S 600 320, 700 350 S 800 380, 900 420 S 1000 400, 1000 500 Z",
                     'foreground-layer': "M0 500 L0 450 C 100 420, 200 400, 300 420 S 400 450, 500 420 S 600 400, 700 420 S 800 450, 900 420 S 1000 400, 1000 500 Z",
                     'river-path': "",
                     'city-silhouette': "",
@@ -2130,7 +2422,7 @@
 
         // Allowed emojis for events
         const ALLOWED_EMOJIS = [
-            '⚔️', '📜', '🔔', '✨', '🔥', '💧', '🌲', '⛰️', '🏘️', '💀', '🌕', '☀️', '☁️', '🌧️', '❄️', '💨', '🧭', '🗺️', '💰', '🛡️', '🧪', '🔑', '🚪', '❓', '❕', '⚠️', '💡', '💬', '👣', '🐎', '🏕️', '🛌', '🍻', '🍖', '🍎', '🍄', '🕸️', '🕷️', '🐺', '🐻', '🐉', '👻', '🧙', '🧝', '👹', '😇', '😈', '👑', '💎', '🏺', '🗝️', '⏳', '🗓️'
+            '⚔️', '📜', '🔔', '✨', '🔥', '💧', '🌲', '⛰️', '🏘️', '💀', '🌕', '☀️', '☁️', '🌧️', '❄️', '💨', '�', '🗺️', '💰', '🛡️', '🧪', '🔑', '🚪', '❓', '❕', '⚠️', '💡', '💬', '👣', '🐎', '🏕️', '🛌', '🍻', '🍖', '🍎', '🍄', '🕸️', '🕷️', '🐺', '🐻', '🐉', '👻', '🧙', '🧝', '👹', '😇', '😈', '👑', '💎', '🏺', '🗝️', '⏳', '️'
         ];
 
 
@@ -2322,12 +2614,18 @@
 
             // Campfire visibility logic (increased probability for testing)
             if ((currentHour >= 20 || currentHour < 5) && Math.random() < 0.1) { // 8 PM to 5 AM, 10% chance
-                campfireElement.style.opacity = 1;
-                setTimeout(() => {
-                    campfireElement.style.opacity = 0;
-                }, 5000); // Visible for 5 seconds
+                if (campfireElement) { // Add this null check
+                    campfireElement.style.opacity = 1;
+                    setTimeout(() => {
+                        if (campfireElement) { // And here too
+                            campfireElement.style.opacity = 0;
+                        }
+                    }, 5000);
+                }
             } else {
-                campfireElement.style.opacity = 0;
+                if (campfireElement) { // And here
+                    campfireElement.style.opacity = 0;
+                }
             }
 
             for (const event of EVENTS) {
@@ -2789,10 +3087,9 @@
          * The main game loop, updates time and visuals.
          */
         function gameLoop() {
-            if (!isRunning) {
-                console.log("gameLoop: Not running, exiting.");
-                return; // Only run if not paused or dragged
-            }
+            if (!isRunning) return; // Only run if not paused or dragged
+
+            console.log(`Scheduled events count: ${scheduledEvents.length}`, scheduledEvents);
 
             let minutesToAdd = 0;
             switch (inGameTimeUnit) {
@@ -2807,7 +3104,7 @@
                     break;
             }
             inGameTimeMinutes += minutesToAdd;
-            console.log(`Game Loop: Time advancing to ${inGameTimeMinutes} minutes. isRunning: ${isRunning}`); // Added log
+            console.log(`Game Loop: Time advancing to ${inGameTimeMinutes} minutes.`); // Added log
 
             updateTimeDisplay();
             updateVisuals(); // This will also handle weather changes
@@ -2820,7 +3117,6 @@
          */
         function startTimer() {
             if (!isRunning) {
-                console.log("startTimer: Attempting to start timer.");
                 const rate = parseFloat(realTimeRateInput.value);
                 if (isNaN(rate) || rate <= 0) {
                     showMessageBox('Please enter a valid positive number for the time rate.');
@@ -2829,7 +3125,6 @@
                 realTimeRateSecondsPerUnit = rate;
                 timerInterval = setInterval(gameLoop, realTimeRateSecondsPerUnit * 1000);
                 isRunning = true;
-                console.log(`startTimer: Timer started. isRunning: ${isRunning}`);
                 startBtn.classList.add('disabled');
                 startBtn.disabled = true;
                 pauseBtn.classList.remove('disabled');
@@ -2861,8 +3156,6 @@
                 initAudio(); // Initialize audio context on first user interaction
                 Tone.start(); // Start Tone.js audio context
                 updateAudioLevels();
-            } else {
-                console.log("startTimer: Timer already running.");
             }
         }
 
@@ -2871,10 +3164,8 @@
          */
         function pauseTimer() {
             if (isRunning) {
-                console.log("pauseTimer: Attempting to pause timer.");
                 clearInterval(timerInterval);
                 isRunning = false;
-                console.log(`pauseTimer: Timer paused. isRunning: ${isRunning}`);
                 startBtn.classList.remove('disabled');
                 startBtn.disabled = false;
                 pauseBtn.classList.add('disabled');
@@ -2882,24 +3173,20 @@
                 realTimeRateInput.disabled = false; // Enable input when paused
                 inGameUnitSelect.disabled = false;
                 campaignThemeSelect.disabled = false;
-                manualWeatherSelect.disabled = false;
-                biomeSelect.disabled = false; // Enable biome select when paused
-                setDayInput.disabled = false; // Enable set day input
-                setDayBtn.disabled = false; // Enable set day button
-                shortRestBtn.disabled = false; // Enable rest/travel buttons
-                longRestBtn.disabled = false;
-                travelTimeInput.disabled = false;
-                travelUnitSelect.disabled = false;
-                travelBtn.disabled = false;
-                addEventBtn.disabled = false; // Enable add event button
-
-                // Pause landscape scrolling by setting a very long duration
-                landscapeSVG.style.animationDuration = '1000000s'; // Effectively stops it
-
-
+                // Only enable locked features if premium is unlocked
+                if (isPremiumUnlocked) {
+                    manualWeatherSelect.disabled = false;
+                    biomeSelect.disabled = false;
+                    setDayInput.disabled = false;
+                    setDayBtn.disabled = false;
+                    shortRestBtn.disabled = false;
+                    longRestBtn.disabled = false;
+                    travelTimeInput.disabled = false;
+                    travelUnitSelect.disabled = false;
+                    travelBtn.disabled = false;
+                    addEventBtn.disabled = false;
+                }
                 updateAudioLevels(); // Mute sounds when paused
-            } else {
-                console.log("pauseTimer: Timer already paused.");
             }
         }
 
@@ -2907,7 +3194,6 @@
          * Resets the time tracker to its initial state.
          */
         function resetTimer() {
-            console.log("resetTimer: Resetting timer.");
             pauseTimer(); // Ensure timer is stopped
             inGameTimeMinutes = 8 * MINUTES_IN_HOUR; // Reset to 08:00 AM
             updateTimeDisplay();
@@ -2924,16 +3210,19 @@
             realTimeRateInput.disabled = false; // Ensure input is enabled
             inGameUnitSelect.disabled = false;
             campaignThemeSelect.disabled = false;
-            manualWeatherSelect.disabled = false;
-            biomeSelect.disabled = false; // Enable biome select
-            setDayInput.disabled = false; // Enable set day input
-            setDayBtn.disabled = false; // Enable set day button
-            shortRestBtn.disabled = false; // Enable rest/travel buttons
-            longRestBtn.disabled = false;
-            travelTimeInput.disabled = false;
-            travelUnitSelect.disabled = false;
-            travelBtn.disabled = false;
-            addEventBtn.disabled = false; // Enable add event button
+            // Only enable locked features if premium is unlocked
+            if (isPremiumUnlocked) {
+                manualWeatherSelect.disabled = false;
+                biomeSelect.disabled = false;
+                setDayInput.disabled = false;
+                setDayBtn.disabled = false;
+                shortRestBtn.disabled = false;
+                longRestBtn.disabled = false;
+                travelTimeInput.disabled = false;
+                travelUnitSelect.disabled = false;
+                travelBtn.disabled = false;
+                addEventBtn.disabled = false;
+            }
             scheduledEvents = []; // Clear all scheduled events
             renderScheduledEvents(); // Clear timeline display
 
@@ -2941,7 +3230,6 @@
 
             // Ensure landscape scrolling is stopped after reset
             landscapeSVG.style.animationDuration = '1000000s';
-            console.log("resetTimer: Timer reset complete.");
         }
 
         /**
@@ -3007,7 +3295,7 @@
             // Reset weather when theme changes
             manualWeatherSelection = ''; // Clear manual selection
             manualWeatherSelect.value = ''; // Reset dropdown
-            currentWeather = getRandomWeatherType(); // Pick a new random starting weather
+            currentWeather = getRandomWeatherType();
             setNewWeatherDuration(); // Set duration for this new weather
             updateVisuals(); // Re-render visuals based on new theme and weather
         }
@@ -3016,6 +3304,11 @@
          * Handles manual weather selection.
          */
         function handleManualWeatherChange() {
+            if (!isPremiumUnlocked) {
+                showMessageBox('This feature requires Premium Unlock.');
+                manualWeatherSelect.value = manualWeatherSelection; // Revert selection
+                return;
+            }
             manualWeatherSelection = manualWeatherSelect.value;
             if (manualWeatherSelection) {
                 currentWeather = manualWeatherSelection;
@@ -3032,6 +3325,11 @@
          * Handles change in biome selection.
          */
         function handleBiomeChange() {
+            if (!isPremiumUnlocked) {
+                showMessageBox('This feature requires Premium Unlock.');
+                biomeSelect.value = currentBiome; // Revert selection
+                return;
+            }
             currentBiome = biomeSelect.value;
             updateLandscapeSVG(); // Update SVG paths
             populateManualWeatherDropdown(); // Update weather dropdown for new biome
@@ -3064,6 +3362,11 @@
          * Sets the in-game day.
          */
         function setDay() {
+            if (!isPremiumUnlocked) {
+                showMessageBox('This feature requires Premium Unlock.');
+                setDayInput.value = Math.floor(inGameTimeMinutes / MINUTES_IN_DAY) + 1; // Reset to current day
+                return;
+            }
             const newDay = parseInt(setDayInput.value);
             if (isNaN(newDay) || newDay < 1) {
                 showMessageBox('Please enter a valid day (1 or greater).');
@@ -3082,6 +3385,10 @@
          * Handles short rest (advances time by 1 hour).
          */
         function shortRest() {
+            if (!isPremiumUnlocked) {
+                showMessageBox('This feature requires Premium Unlock.');
+                return;
+            }
             pauseTimer();
             inGameTimeMinutes += MINUTES_IN_HOUR;
             updateTimeDisplay();
@@ -3093,6 +3400,10 @@
          * Handles long rest (advances time by 8 hours).
          */
         function longRest() {
+            if (!isPremiumUnlocked) {
+                showMessageBox('This feature requires Premium Unlock.');
+                return;
+            }
             pauseTimer();
             inGameTimeMinutes += (HOURS_IN_DAY / 3) * MINUTES_IN_HOUR; // 8 hours
             updateTimeDisplay();
@@ -3107,6 +3418,10 @@
          * Handles travel (advances time by custom hours/days).
          */
         function travel() {
+            if (!isPremiumUnlocked) {
+                showMessageBox('This feature requires Premium Unlock.');
+                return;
+            }
             pauseTimer();
             let travelAmount = parseInt(travelTimeInput.value);
             const travelUnit = travelUnitSelect.value;
@@ -3176,10 +3491,10 @@
 
             eventMinuteSelect.innerHTML = '';
             for (let i = 0; i < 60; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = String(i).padStart(2, '0');
-                eventMinuteSelect.appendChild(option);
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = String(i).padStart(2, '0');
+                    eventMinuteSelect.appendChild(option);
             }
         }
 
@@ -3187,6 +3502,10 @@
          * Opens the event scheduling modal.
          */
         function openEventModal() {
+            if (!isPremiumUnlocked) {
+                showMessageBox('This feature requires Premium Unlock.');
+                return;
+            }
             eventModal.style.display = 'flex';
             // Pre-fill with current time
             const currentDay = Math.floor(inGameTimeMinutes / MINUTES_IN_DAY) + 1;
@@ -3427,17 +3746,15 @@
          */
         function checkScheduledEvents() {
             const currentTotalMinutes = inGameTimeMinutes;
-            console.log(`checkScheduledEvents: Current time is ${currentTotalMinutes} minutes.`); // Debug log
-            let eventTriggeredThisCycle = false;
-
-            for (const event of scheduledEvents) {
-                console.log(`  checkScheduledEvents: Checking Event ID ${event.id}. Scheduled for ${event.timeInMinutes}, Triggered: ${event.triggered}`); // Debug log
+            console.log(`Checking scheduled events at ${currentTotalMinutes} minutes.`); // Debug log
+            scheduledEvents.forEach(event => {
+                console.log(`  Event ID ${event.id}: Scheduled for ${event.timeInMinutes}, Triggered: ${event.triggered}`); // Debug log
                 // Check if the event has not been triggered yet and if the current time has passed or reached the event time
                 if (!event.triggered && currentTotalMinutes >= event.timeInMinutes) {
-                    console.log(`  >>> EVENT TRIGGERED: ${event.message} at ${currentTotalMinutes} minutes. Pausing timer.`); // Debug log
+                    console.log(`  >>> EVENT TRIGGERED: ${event.message} at ${currentTotalMinutes} minutes.`); // Debug log
                     showMessageBox(`Event Triggered: Day ${event.day}, ${String(event.hour).padStart(2, '0')}:${String(event.minute).padStart(2, '0')} - ${event.message}`);
                     event.triggered = true; // Mark as triggered
-                    eventTriggeredThisCycle = true; // Set flag
+                    pauseTimer(); // Pause timer when event arrives
                     // Optionally, remove the event marker or change its style
                     const marker = timelineContent.querySelector(`[data-event-id="${event.id}"]`);
                     if (marker) {
@@ -3445,14 +3762,8 @@
                     }
                     // Show event details pop-up
                     showEventDetails(event.id);
-                    // Do not break here if multiple events can trigger at the same minute,
-                    // but ensure pauseTimer is called only once per cycle if multiple events trigger.
                 }
-            }
-
-            if (eventTriggeredThisCycle) {
-                pauseTimer(); // Pause timer if any event was triggered
-            }
+            });
         }
 
         // --- Task List Functions ---
@@ -3558,21 +3869,19 @@
             const currentX = e.clientX || e.touches[0].clientX;
             const deltaX = currentX - dragStartX;
 
-            // Map horizontal drag to time change (e.g., 100px drag = 1 hour)
-            // Adjust this sensitivity as needed
-            const dragSensitivity = PIXELS_PER_MINUTE; // 3 pixels of drag equals 1 in-game minute
-            const timeChangeMinutes = Math.round(deltaX / dragSensitivity); // Round to nearest minute
+            const dragSensitivity = PIXELS_PER_MINUTE;
+            const timeChangeMinutes = Math.round(deltaX / dragSensitivity);
 
             inGameTimeMinutes = initialInGameTimeMinutes + timeChangeMinutes;
 
-            // Ensure time doesn't go negative (optional, depends on desired behavior)
             if (inGameTimeMinutes < 0) {
                 inGameTimeMinutes = 0;
             }
 
             updateTimeDisplay();
             updateVisuals();
-            renderScheduledEvents(); // Update timeline position during drag
+            renderScheduledEvents();
+            checkScheduledEvents(); // Add this line
         }
 
         function endDrag() {
@@ -3587,6 +3896,142 @@
             appContainer.classList.remove('dragging');
             // Optionally restart timer if it was running before drag
             // if (wasRunningBeforeDrag) { startTimer(); }
+        }
+
+        // --- Premium Unlock Functions ---
+
+        /**
+         * Simulates fetching the monthly premium code from an API.
+         * In a real application, you would replace the fetch call with your actual backend endpoint.
+         * @returns {Promise<{code: string}|null>} A promise that resolves with the monthly code or null on error.
+         */
+        async function getMonthlyPremiumCode() {
+            try {
+                // In a real scenario, this would be a fetch call to your backend:
+                // const response = await fetch(PREMIUM_CODE_API_URL);
+                // const data = await response.json();
+                // return data;
+
+                // For this month, we'll return the provided code D20F6E0F
+                // In a live system, your backend would return the *current* monthly code.
+                return new Promise(resolve => setTimeout(() => {
+                    resolve({ code: "D20F6E0F" }); // This month's code
+                }, 500)); // Simulate network delay
+            } catch (error) {
+                console.error("Error fetching monthly premium code:", error);
+                return null;
+            }
+        }
+
+
+        /**
+         * Checks the premium status from localStorage and updates the flag.
+         */
+        function checkPremiumStatus() {
+            const storedStatus = localStorage.getItem('dndPremiumUnlocked');
+            if (storedStatus === 'true') {
+                isPremiumUnlocked = true;
+            } else {
+                isPremiumUnlocked = false;
+            }
+            updatePremiumUI();
+        }
+
+        /**
+         * Updates the UI elements based on premium unlock status.
+         */
+        function updatePremiumUI() {
+            if (isPremiumUnlocked) {
+                premiumStatusDisplay.textContent = 'Premium Status: Unlocked';
+                premiumStatusDisplay.style.color = '#4CAF50'; // Green
+                openPremiumUnlockModalBtn.style.display = 'none';
+
+                // Enable locked features
+                environmentLockedFeatures.classList.remove('locked');
+                partyActionsLockedFeatures.classList.remove('locked');
+                scheduleEventLockedFeature.classList.remove('locked');
+
+                // Re-enable inputs/buttons that were disabled by locking
+                biomeSelect.disabled = false;
+                manualWeatherSelect.disabled = false;
+                setDayInput.disabled = false;
+                setDayBtn.disabled = false;
+                shortRestBtn.disabled = false;
+                longRestBtn.disabled = false;
+                travelTimeInput.disabled = false;
+                travelUnitSelect.disabled = false;
+                travelBtn.disabled = false;
+                addEventBtn.disabled = false;
+
+            } else {
+                premiumStatusDisplay.textContent = 'Premium Status: Locked';
+                premiumStatusDisplay.style.color = '#ff4d4d'; // Red
+                openPremiumUnlockModalBtn.style.display = 'flex'; // Show the unlock button
+
+                // Disable locked features
+                environmentLockedFeatures.classList.add('locked');
+                partyActionsLockedFeatures.classList.add('locked');
+                scheduleEventLockedFeature.classList.add('locked');
+
+                // Explicitly disable inputs/buttons
+                biomeSelect.disabled = true;
+                manualWeatherSelect.disabled = true;
+                setDayInput.disabled = true;
+                setDayBtn.disabled = true;
+                shortRestBtn.disabled = true;
+                longRestBtn.disabled = true;
+                travelTimeInput.disabled = true;
+                travelUnitSelect.disabled = true;
+                travelBtn.disabled = true;
+                addEventBtn.disabled = true;
+            }
+        }
+
+        /**
+         * Opens the premium unlock modal.
+         */
+        function openPremiumUnlockModal() {
+            premiumUnlockModal.style.display = 'flex';
+            premiumCodeInput.value = '';
+            premiumUnlockMessage.textContent = '';
+            premiumUnlockMessage.classList.remove('error', 'success');
+        }
+
+        /**
+         * Closes a modal by its ID.
+         * @param {string} modalId - The ID of the modal to close.
+         */
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        /**
+         * Handles the submission of the premium unlock code.
+         */
+        async function submitPremiumCode() {
+            const enteredCode = premiumCodeInput.value.trim().toUpperCase();
+            premiumUnlockMessage.textContent = 'Verifying code...';
+            premiumUnlockMessage.classList.remove('error', 'success');
+
+            const apiResponse = await getMonthlyPremiumCode();
+            const monthlyCode = apiResponse ? apiResponse.code : null;
+
+            if (monthlyCode && enteredCode === monthlyCode) {
+                localStorage.setItem('dndPremiumUnlocked', 'true');
+                isPremiumUnlocked = true;
+                premiumUnlockMessage.textContent = 'Premium features unlocked!';
+                premiumUnlockMessage.classList.remove('error');
+                premiumUnlockMessage.classList.add('success');
+                updatePremiumUI();
+                setTimeout(() => {
+                    closeModal('modal-premium-unlock');
+                }, 1500); // Close modal after a short delay
+            } else {
+                premiumUnlockMessage.textContent = 'Incorrect code. Please try again.';
+                premiumUnlockMessage.classList.remove('success');
+                premiumUnlockMessage.classList.add('error');
+                premiumCodeInput.value = ''; // Clear input
+            }
         }
 
 
@@ -3644,6 +4089,33 @@
             }
         });
 
+        // Premium Unlock Event Listeners
+        openPremiumUnlockModalBtn.addEventListener('click', openPremiumUnlockModal);
+        submitPremiumCodeBtn.addEventListener('click', submitPremiumCode);
+        premiumCodeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitPremiumCode();
+            }
+        });
+
+        // Close modal listeners for premium unlock modal
+        premiumUnlockModal.querySelectorAll('.close-button').forEach(button => {
+            button.addEventListener('click', () => {
+                closeModal(button.dataset.modal);
+            });
+        });
+
+        // Add event listener to overlays to open premium modal
+        document.querySelectorAll('.premium-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                const targetModalId = e.currentTarget.dataset.modalTarget;
+                if (targetModalId) {
+                    document.getElementById(targetModalId).style.display = 'flex';
+                    premiumCodeInput.focus();
+                }
+            });
+        });
+
 
         // --- Initial Setup on Load ---
         function initializeApp() {
@@ -3690,9 +4162,18 @@
             });
 
             animateParticles(); // Start particle animation loop
+
+            // Initialize Lucide Icons for the new premium unlock modal
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // Check premium status on app initialization
+            checkPremiumStatus();
         }
 
         window.onload = initializeApp;
     </script>
 </body>
 </html>
+�
